@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import NewsletterCard from "../components/NewsletterCard";
 import TimeMachine from "../components/TimeMachine";
+import History from "../components/History";
 
 export interface Newsletter {
   id: number; // assuming the ID is numerical from the backend (or use string if you have it as string)
@@ -58,16 +59,7 @@ const UserDashboard: React.FC = () => {
           </div>
         );
       case "history":
-        return (
-          <div className="p-4 border border-gray-200 rounded">
-            <h2 className="text-2xl font-bold mb-2">
-              Newsletter Access History
-            </h2>
-            <p>
-              History of newsletter accesses will be shown here (coming soon).
-            </p>
-          </div>
-        );
+        return <History />;
       case "userDetails":
         return (
           <div className="p-4 border border-gray-200 rounded">

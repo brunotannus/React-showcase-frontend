@@ -33,7 +33,6 @@ const TimeMachine: React.FC<TimeMachineProps> = ({ onNewslettersChange }) => {
   // The postNewsletter function that sends the simulated date to the backend
   const postNewsletter = async (date: Date) => {
     try {
-      console.log("Posting newsletter for:", formatDateString(date));
       const response = await fetch("http://localhost:3001/newsletters", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -43,7 +42,6 @@ const TimeMachine: React.FC<TimeMachineProps> = ({ onNewslettersChange }) => {
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
-      console.log("Newsletter posted successfully");
       if (onNewslettersChange) {
         onNewslettersChange();
       }
@@ -84,9 +82,35 @@ const TimeMachine: React.FC<TimeMachineProps> = ({ onNewslettersChange }) => {
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
-      console.log("Future newsletters deleted successfully");
     } catch (error: any) {
       console.error(error.message || "Failed to delete future newsletters");
+    }
+  };
+
+  // Deletes user history from the backend—invoked on reset
+  const deleteHistory = async () => {
+    try {
+      const userString = localStorage.getItem("user");
+      if (!userString) {
+        console.error("No logged in user found in localStorage.");
+        return;
+      }
+      const user = JSON.parse(userString);
+      const response = await fetch(
+        `http://localhost:3001/users/${user.id}/history`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+      console.log("User history deleted successfully");
+    } catch (error: any) {
+      console.error(error.message || "Failed to delete user history");
     }
   };
 
@@ -94,6 +118,7 @@ const TimeMachine: React.FC<TimeMachineProps> = ({ onNewslettersChange }) => {
   const handleReset = async () => {
     setSimulatedDate(defaultSimulatedDate);
     await deleteFutureNewsletters(defaultSimulatedDate);
+    await deleteHistory();
     if (onNewslettersChange) {
       onNewslettersChange();
     }
@@ -103,7 +128,7 @@ const TimeMachine: React.FC<TimeMachineProps> = ({ onNewslettersChange }) => {
   const localSimulatedDate = parseLocalDate(simulatedDate);
 
   return (
-    <div className="w-full p-4 bg-tn-yellow border-b border-gray-200 flex flex-col items-center justify-center">
+    <div className="w-full p-4 bg-tn-yellow border-b border-gray-200 flex items-center justify-center">
       <label>
         Data de Hoje:
         <span className="font-semibold text-neutral-800 ml-2">

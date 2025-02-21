@@ -29,6 +29,10 @@ code {
   @apply bg-white text-neutral-800 font-normal text-lg;
 }
 
+.btn-primary:disabled {
+  @apply opacity-50;
+}
+
 .btn-logout {
   @apply py-1 px-2 text-xs text-tn-gray border border-gray-200 rounded-md transition-all ease-in-out;
 }
