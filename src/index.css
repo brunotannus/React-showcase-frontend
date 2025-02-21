@@ -29,6 +29,14 @@ code {
   @apply bg-white text-neutral-800 font-normal text-lg;
 }
 
+.btn-logout {
+  @apply py-1 px-2 text-xs text-tn-gray border border-gray-200 rounded-md transition-all ease-in-out;
+}
+
+.btn-logout:hover {
+  @apply bg-tn-yellow text-white;
+}
+
 h1 {
   @apply w-full text-center text-4xl sm:text-5xl font-bold;
 }

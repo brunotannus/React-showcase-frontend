@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 
 const Login: React.FC = () => {
-  // Estado para email, senha e eventualmente mensagens de erro
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -32,6 +31,7 @@ const Login: React.FC = () => {
       // Store token and role
       localStorage.setItem("userToken", data.token);
       localStorage.setItem("userRole", data.user.role);
+      localStorage.setItem("user", JSON.stringify(data.user));
       // Se o backend utilizar JWT, você pode armazenar o token, ex:
       // localStorage.setItem("userToken", data.token);
 
@@ -42,6 +42,12 @@ const Login: React.FC = () => {
       setError("Erro inesperado, tente novamente mais tarde.");
     }
   };
+
+  const token = localStorage.getItem("userToken");
+
+  if (token) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   return (
     <div>

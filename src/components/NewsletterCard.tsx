@@ -9,9 +9,13 @@ interface NewsletterCardProps {
 
 const NewsletterCard: React.FC<NewsletterCardProps> = ({ id, image, date }) => {
   const formattedDate = new Date(date).toLocaleDateString("pt-BR");
+
+  const calculateStreak = () => {
+    console.log(localStorage.getItem("user"));
+  };
   return (
-    <Link to={`/newsletter/${id}`}>
-      <div className="bg-tn-yellow overflow-hidden rounded-lg border border-gray-200 p-0 cursor-pointer hover:shadow-md transition-shadow">
+    <Link to={`/newsletter/${id}`} onClick={calculateStreak}>
+      <div className="bg-tn-yellow max-w-96 overflow-hidden rounded-lg border border-gray-200 p-0 cursor-pointer hover:shadow-md transition-shadow">
         <img
           src={image}
           alt="Newsletter"
