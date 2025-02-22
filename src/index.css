@@ -33,6 +33,10 @@ code {
   @apply opacity-50;
 }
 
+.btn-primary-inactive:hover {
+  @apply shadow-md transition-shadow;
+}
+
 .btn-logout {
   @apply py-1 px-2 text-xs text-tn-gray border border-gray-200 rounded-md transition-all ease-in-out;
 }

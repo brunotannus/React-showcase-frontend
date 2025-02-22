@@ -50,14 +50,46 @@ const TimeMachine: React.FC<TimeMachineProps> = ({ onNewslettersChange }) => {
     }
   };
 
+  const checkStreak = async (userId: string, dateToCheck: string) => {
+    // dateToCheck is a string in "YYYY-MM-DD" format which represents the day to check,
+    try {
+      const response = await fetch(
+        `http://localhost:3001/users/${userId}/check-streak`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ date: dateToCheck }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log(data.message);
+    } catch (err: any) {
+      console.error(err.message || "Failed to check streak");
+    }
+  };
+
   // Handler for Next Day button
-  const handleNextDay = () => {
+  const handleNextDay = async () => {
+    // Tell the backend to check if a streak was redeemed the previous day (except Sundays)
+    // If not, reset the streak
+    const userString = localStorage.getItem("user");
+    if (!userString) {
+      throw new Error("No user found in localStorage.");
+    }
+    const user = JSON.parse(userString);
+    await checkStreak(user.id, simulatedDate);
+
     const currentDate = parseLocalDate(simulatedDate);
     currentDate.setDate(currentDate.getDate() + 1);
     const newSimulatedDate = formatDateString(currentDate);
     setSimulatedDate(newSimulatedDate);
 
-    // Conditions to post a newsletter (adjust as needed)
+    // Posts a newsletter on a new day
     if (
       currentDate.getTime() >= parseLocalDate("2025-02-21").getTime() &&
       currentDate.getTime() <= parseLocalDate("2025-02-28").getTime() &&
@@ -114,11 +146,39 @@ const TimeMachine: React.FC<TimeMachineProps> = ({ onNewslettersChange }) => {
     }
   };
 
+  // Deletes user progress from the backend—invoked on reset
+  const deleteUserProgress = async () => {
+    try {
+      const userString = localStorage.getItem("user");
+      if (!userString) {
+        console.error("No logged in user found in localStorage.");
+        return;
+      }
+      const user = JSON.parse(userString);
+      const response = await fetch(
+        `http://localhost:3001/users/${user.id}/progress`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+      console.log("User progress deleted successfully");
+    } catch (error: any) {
+      console.error(error.message || "Failed to delete user progress");
+    }
+  };
+
   // Handler for Reset button
   const handleReset = async () => {
     setSimulatedDate(defaultSimulatedDate);
     await deleteFutureNewsletters(defaultSimulatedDate);
     await deleteHistory();
+    await deleteUserProgress();
     if (onNewslettersChange) {
       onNewslettersChange();
     }

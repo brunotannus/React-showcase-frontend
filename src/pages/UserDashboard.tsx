@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import NewsletterCard from "../components/NewsletterCard";
 import TimeMachine from "../components/TimeMachine";
 import History from "../components/History";
+import Streak from "../components/Streak";
 
 export interface Newsletter {
   id: number; // assuming the ID is numerical from the backend (or use string if you have it as string)
@@ -61,12 +62,7 @@ const UserDashboard: React.FC = () => {
       case "history":
         return <History />;
       case "userDetails":
-        return (
-          <div className="p-4 border border-gray-200 rounded">
-            <h2 className="text-2xl font-bold mb-2">User Details & Streak</h2>
-            <p>User streak and details will be displayed here (coming soon).</p>
-          </div>
-        );
+        return <Streak />;
       default:
         return null;
     }
@@ -127,7 +123,7 @@ const UserDashboard: React.FC = () => {
                 : "btn-primary-inactive"
             }`}
           >
-            Streaks
+            Streak
           </button>
         </div>
         {/* Tab Content */}

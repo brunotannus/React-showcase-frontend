@@ -41,6 +41,9 @@ const NewsletterCard: React.FC<NewsletterCardProps> = ({ id, image, date }) => {
       } catch (error: any) {
         console.error("Error updating user history:", error.message);
       }
+
+      // Check for streak increase
+      //
     }
 
     return;
@@ -48,7 +51,7 @@ const NewsletterCard: React.FC<NewsletterCardProps> = ({ id, image, date }) => {
 
   return (
     <Link to={`/newsletter/${id}`} onClick={handleCardClick}>
-      <div className="bg-tn-yellow max-w-96 overflow-hidden rounded-lg border border-gray-200 p-0 cursor-pointer hover:shadow-md transition-shadow">
+      <div className="bg-tn-yellow max-w-96 overflow-hidden rounded-lg border border-gray-200 p-0 cursor-pointer hover:shadow-md hover:-translate-x-1 hover:-translate-y-1 transition-all ease-in-out">
         <img
           src={image}
           alt="Newsletter"
