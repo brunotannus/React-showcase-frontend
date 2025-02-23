@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import NewsletterCard from "../components/NewsletterCard";
 import TimeMachine from "../components/TimeMachine";
 import History from "../components/History";
@@ -17,9 +17,8 @@ export interface Newsletter {
 const UserDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState("newsletters");
   const [newsletters, setNewsletters] = useState<Newsletter[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>("");
-  const [avatarUrl, setAvatarUrl] = useState<string>("");
+  const [, setLoading] = useState<boolean>(true);
+  const [, setError] = useState<string>("");
   // A counter to signal that the avatar has been updated.
   const [avatarUpdateTrigger, setAvatarUpdateTrigger] = useState(0);
   const user = JSON.parse(localStorage.getItem("user") || "{}");

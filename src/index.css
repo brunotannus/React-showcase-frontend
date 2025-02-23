@@ -37,12 +37,36 @@ code {
   @apply shadow-md transition-shadow;
 }
 
-.btn-logout {
+.btn-toolbar {
   @apply py-1 px-2 text-xs text-tn-gray border border-gray-200 rounded-md transition-all ease-in-out;
 }
 
-.btn-logout:hover {
+.btn-toolbar:hover {
   @apply bg-tn-yellow text-white;
+}
+
+.leaderboard-table {
+  @apply w-full border-separate border-spacing-0 border border-gray-300 rounded-md text-neutral-800;
+}
+
+.leaderboard-table th {
+  @apply bg-gray-100 px-4 py-2 text-left font-medium border-b;
+}
+
+.leaderboard-table th:first-child {
+  @apply rounded-tl-md;
+}
+
+.leaderboard-table th:last-child {
+  @apply rounded-tr-md;
+}
+
+.leaderboard-table td {
+  @apply px-4 py-2;
+}
+
+.leaderboard-table .even-row {
+  @apply bg-gray-50;
 }
 
 h1 {

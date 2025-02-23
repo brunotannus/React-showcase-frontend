@@ -32,10 +32,6 @@ const Login: React.FC = () => {
       localStorage.setItem("userToken", data.token);
       localStorage.setItem("userRole", data.user.role);
       localStorage.setItem("user", JSON.stringify(data.user));
-      // Se o backend utilizar JWT, você pode armazenar o token, ex:
-      // localStorage.setItem("userToken", data.token);
-
-      // Ao fazer login com sucesso, redireciona para o dashboard.
       navigate(data.redirectTo);
     } catch (err) {
       console.error("Erro inesperado: ", err);

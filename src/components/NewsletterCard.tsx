@@ -41,9 +41,6 @@ const NewsletterCard: React.FC<NewsletterCardProps> = ({ id, image, date }) => {
       } catch (error: any) {
         console.error("Error updating user history:", error.message);
       }
-
-      // Check for streak increase
-      //
     }
 
     return;

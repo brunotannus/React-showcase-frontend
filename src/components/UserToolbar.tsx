@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface UserToolbarProps {
   avatarUrl: number;
@@ -9,9 +10,10 @@ const UserToolbar: React.FC<UserToolbarProps> = ({ avatarUrl, userId }) => {
   const [localAvatarUrl, setLocalAvatarUrl] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [userRole, setUserRole] = useState<string>("");
   const avatarContainerRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
-  // Fetch avatar image on mount
   useEffect(() => {
     const fetchAvatar = async () => {
       try {
@@ -28,8 +30,26 @@ const UserToolbar: React.FC<UserToolbarProps> = ({ avatarUrl, userId }) => {
         console.error(err.message || "Error fetching avatar");
       }
     };
+
+    const getRole = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3001/users/${userId}/role`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch user role");
+        }
+        const data = await response.json();
+        setUserRole(data.role);
+      } catch (err: any) {
+        console.error(err.message || "Error fetching user role");
+      }
+    };
+
     fetchAvatar();
+    getRole();
   }, [userId, avatarUrl]);
+
   // Logout handler
   const handleLogout = () => {
     localStorage.clear();
@@ -80,8 +100,13 @@ const UserToolbar: React.FC<UserToolbarProps> = ({ avatarUrl, userId }) => {
   }, [showModal]);
 
   return (
-    <div className="flex gap-3 justify-end items-center">
-      <button onClick={handleLogout} className="btn-logout h-8">
+    <div className="flex gap-1 justify-end items-center">
+      {userRole === "admin" && ( // Show Admin button only for admin users
+        <button onClick={() => navigate("/admin")} className="btn-toolbar h-8">
+          Admin
+        </button>
+      )}
+      <button onClick={handleLogout} className="btn-toolbar h-8 mr-2">
         Logout
       </button>
       <div ref={avatarContainerRef} className="relative">

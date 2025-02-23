@@ -107,7 +107,7 @@ const Streak: React.FC<StreakProps> = ({ onAvatarChange, userId }) => {
     }, 5000);
 
     return () => clearInterval(intervalId);
-  }, []);
+  }, [userId]);
 
   return (
     <div className="p-4 bg-white shadow rounded-lg max-w-md mx-auto my-4">
@@ -123,9 +123,29 @@ const Streak: React.FC<StreakProps> = ({ onAvatarChange, userId }) => {
             />
             <p className="text-3xl text-neutral-800">{streak}</p>
           </div>
-          <p className="text-gray-400 text-sm text-center">
+          <p className="text-gray-400 text-sm text-center mb-2">
             Highscore: <span className="font-bold">{highscore}</span>
           </p>
+          {/* Display motivational message for each streak interval */}
+          {streak < 2 && (
+            <p className="text-gray-300 text-center italic text-sm">
+              Você está começando uma jornada incrível! Cada esforço conta,
+              então não desanime. Continue praticando e logo os resultados
+              aparecerão!
+            </p>
+          )}
+          {streak >= 2 && streak < 4 && (
+            <p className="text-gray-300 text-center italic text-sm">
+              Ótimo progresso! Você já demonstrou habilidade e dedicação.
+              Mantenha o foco, pois grandes conquistas estão a caminho!
+            </p>
+          )}
+          {streak >= 4 && (
+            <p className="text-gray-300 text-center italic text-sm">
+              Incrível! Seu desempenho é excepcional e você está dominando o
+              jogo. Continue brilhando e desafiando seus limites!
+            </p>
+          )}
           <h2 className="text-xl font-bold mb-2 mt-4">Avatars</h2>
           <div className="flex flex-col gap-4 justify-center px-2">
             {avatars.map((avatar) => {
