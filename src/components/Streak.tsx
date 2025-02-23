@@ -1,25 +1,71 @@
 import React, { useState, useEffect } from "react";
 
-const Streak: React.FC = () => {
+interface StreakProps {
+  onAvatarChange?: (newAvatarUrl: string) => void;
+  userId: string;
+}
+
+const Streak: React.FC<StreakProps> = ({ onAvatarChange, userId }) => {
   const [streak, setStreak] = useState<number | null>(null);
+  const [highscore, setHighscore] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
+  const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
+  // Array of avatars with their unlock highscore requirement and image endpoints.
+  const avatars = [
+    {
+      id: "avatar1",
+      unlockScore: 0,
+      image: "/resources/images/avatars/avatar1.png",
+      desc: "Avatar padrão",
+    },
+    {
+      id: "avatar2",
+      unlockScore: 2,
+      image: "/resources/images/avatars/avatar2.png",
+      desc: "Desbloqueado em highscore 2",
+    },
+    {
+      id: "avatar3",
+      unlockScore: 5,
+      image: "/resources/images/avatars/avatar3.png",
+      desc: "Desbloqueado em highscore 5",
+    },
+  ];
+
+  const handleAvatarChange = async (avatar: any) => {
+    if (highscore >= avatar.unlockScore) {
+      await fetch(`http://localhost:3001/users/${userId}/avatar`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ avatar: avatar.image }),
+      });
+      setSelectedAvatar(avatar.id);
+      // This signals the parent to trigger a re-fetch in UserToolbar.
+      if (onAvatarChange) {
+        onAvatarChange(avatar.image);
+      }
+    }
+  };
 
   useEffect(() => {
-    // Retrieve the logged-in user from localStorage.
-    const userStr = localStorage.getItem("user");
-    if (!userStr) {
-      setError("User data not found in localStorage.");
-      return;
-    }
-
-    let user;
-    try {
-      user = JSON.parse(userStr);
-    } catch (err) {
-      setError("Error parsing user data.");
-      return;
-    }
-    const userId = user.id;
+    // Function to fetch the current avatar from the backend.
+    const fetchAvatar = async () => {
+      try {
+        console.log(localStorage.getItem("user"));
+        const res = await fetch(
+          `http://localhost:3001/users/${userId}/avatar-id`
+        );
+        if (!res.ok) {
+          throw new Error(`Error fetching avatar: ${res.status}`);
+        }
+        const data = await res.json();
+        setSelectedAvatar(data.avatarId);
+      } catch (err: any) {
+        setError(err.message || "Error fetching avatar.");
+      }
+    };
 
     // Function to fetch the current streak from the backend.
     const fetchStreak = async () => {
@@ -35,21 +81,87 @@ const Streak: React.FC = () => {
       }
     };
 
+    // Function to fetch a user's highscore from the backend.
+    const fetchHighscore = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:3001/users/${userId}/highscore`
+        );
+        if (!res.ok) {
+          throw new Error(`Error fetching highscore: ${res.status}`);
+        }
+        const data = await res.json();
+        setHighscore(data.highscore);
+      } catch (err: any) {
+        setError(err.message || "Error fetching highscore.");
+      }
+    };
+
     // Call once immediately and then set an interval to poll.
     fetchStreak();
+    fetchHighscore();
+    fetchAvatar();
     const intervalId = setInterval(() => {
       fetchStreak();
-    }, 5000); // Poll every 5 seconds (adjust as needed)
+      fetchHighscore();
+    }, 5000);
 
     return () => clearInterval(intervalId);
   }, []);
 
   return (
-    <div className="p-4  rounded shadow my-4">
-      <h2 className="text-xl font-bold mb-2">Current Streak</h2>
+    <div className="p-4 bg-white shadow rounded-lg max-w-md mx-auto my-4">
+      <h2 className="text-xl font-bold mb-2">Streak</h2>
       {error && <p className="text-red-500">{error}</p>}
       {streak !== null ? (
-        <p className="text-lg text-gray-700">{streak}</p>
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-2 justify-center">
+            <img
+              src="/resources/images/flame.png"
+              alt="Fire"
+              className="w-12 h-12"
+            />
+            <p className="text-3xl text-neutral-800">{streak}</p>
+          </div>
+          <p className="text-gray-400 text-sm text-center">
+            Highscore: <span className="font-bold">{highscore}</span>
+          </p>
+          <h2 className="text-xl font-bold mb-2 mt-4">Avatars</h2>
+          <div className="flex flex-col gap-4 justify-center px-2">
+            {avatars.map((avatar) => {
+              // Determine whether the avatar is unlocked.
+              const unlocked = highscore >= avatar.unlockScore;
+              // If locked, apply greyed-out styling and remove interactivity.
+              const avatarClasses = `w-16 h-16 transition-opacity duration-200 ${
+                unlocked ? "cursor-pointer" : "opacity-30 cursor-not-allowed"
+              }`;
+              return (
+                <div
+                  key={avatar.id}
+                  className="flex items-center gap-4 bg-gray-100 p-2 rounded-lg"
+                >
+                  <img
+                    src={avatar.image}
+                    alt={avatar.id}
+                    className={avatarClasses}
+                    onClick={() => unlocked && handleAvatarChange(avatar)}
+                  />
+                  {selectedAvatar === avatar.id ? (
+                    <span className="text-green-500 text-sm mt-1">Em uso</span>
+                  ) : unlocked ? (
+                    <span className="text-neutral-800 text-sm mt-1">
+                      {avatar.desc}
+                    </span>
+                  ) : (
+                    <span className="text-red-300 text-sm mt-1">
+                      Highscore {avatar.unlockScore} necessário
+                    </span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
       ) : (
         <p className="text-gray-500">Loading...</p>
       )}

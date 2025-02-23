@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import NewsletterCard from "../components/NewsletterCard";
 import TimeMachine from "../components/TimeMachine";
 import History from "../components/History";
 import Streak from "../components/Streak";
+import UserToolbar from "../components/UserToolbar";
 
 export interface Newsletter {
-  id: number; // assuming the ID is numerical from the backend (or use string if you have it as string)
+  id: number;
   date: Date;
   title: string;
   motivationalText: string;
@@ -18,8 +19,24 @@ const UserDashboard: React.FC = () => {
   const [newsletters, setNewsletters] = useState<Newsletter[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
+  const [avatarUrl, setAvatarUrl] = useState<string>("");
+  // A counter to signal that the avatar has been updated.
+  const [avatarUpdateTrigger, setAvatarUpdateTrigger] = useState(0);
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const userId = user.id;
 
-  // Function to fetch newsletters from the backend
+  // Function to refetch the avatar image
+  const handleAvatarChange = () => {
+    setAvatarUpdateTrigger((prev) => prev + 1);
+  };
+
+  // Function to handle reset
+  const handleReset = () => {
+    // Set open tab to newsletters
+    setActiveTab("newsletters");
+  };
+
+  // Fetch newsletters from the backend
   const fetchNewsletters = async () => {
     try {
       setLoading(true);
@@ -36,7 +53,7 @@ const UserDashboard: React.FC = () => {
     }
   };
 
-  // Initial fetch on mount
+  // Do initial fetches on mount
   useEffect(() => {
     fetchNewsletters();
   }, []);
@@ -60,9 +77,9 @@ const UserDashboard: React.FC = () => {
           </div>
         );
       case "history":
-        return <History />;
+        return <History userId={userId} />;
       case "userDetails":
-        return <Streak />;
+        return <Streak userId={userId} onAvatarChange={handleAvatarChange} />;
       default:
         return null;
     }
@@ -71,20 +88,13 @@ const UserDashboard: React.FC = () => {
   return (
     <div className="flex flex-col items-center">
       <div className="flex w-full">
-        <TimeMachine onNewslettersChange={fetchNewsletters} />
+        <TimeMachine
+          onNewslettersChange={fetchNewsletters}
+          onReset={handleReset}
+        />
       </div>
       <div className="w-[95%] mx-auto p-4">
-        <div className="w-full flex justify-end">
-          <button
-            onClick={() => {
-              localStorage.clear();
-              window.location.href = "/login";
-            }}
-            className="btn-logout"
-          >
-            Logout
-          </button>
-        </div>
+        <UserToolbar avatarUrl={avatarUpdateTrigger} userId={userId} />
         <div className="my-8 flex-start flex flex-col items-center py-2">
           <div className="mb-4 overflow-hidden rounded h-20 w-20 shadow-md border-0">
             <img
@@ -95,7 +105,6 @@ const UserDashboard: React.FC = () => {
           </div>
           <h1>the news Case</h1>
         </div>
-        {/* Tab Navigation */}
         <div className="flex flex-wrap justify-center mb-6">
           <button
             onClick={() => setActiveTab("newsletters")}
@@ -126,7 +135,6 @@ const UserDashboard: React.FC = () => {
             Streak
           </button>
         </div>
-        {/* Tab Content */}
         <div>{renderTabContent()}</div>
       </div>
     </div>

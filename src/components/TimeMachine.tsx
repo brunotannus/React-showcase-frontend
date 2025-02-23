@@ -17,9 +17,13 @@ const formatDateString = (date: Date): string => {
 
 interface TimeMachineProps {
   onNewslettersChange?: () => void;
+  onReset?: () => void;
 }
 
-const TimeMachine: React.FC<TimeMachineProps> = ({ onNewslettersChange }) => {
+const TimeMachine: React.FC<TimeMachineProps> = ({
+  onNewslettersChange,
+  onReset,
+}) => {
   // Initialize state from localStorage or default
   const [simulatedDate, setSimulatedDate] = useState<string>(() => {
     return localStorage.getItem("simulatedDate") || defaultSimulatedDate;
@@ -51,7 +55,6 @@ const TimeMachine: React.FC<TimeMachineProps> = ({ onNewslettersChange }) => {
   };
 
   const checkStreak = async (userId: string, dateToCheck: string) => {
-    // dateToCheck is a string in "YYYY-MM-DD" format which represents the day to check,
     try {
       const response = await fetch(
         `http://localhost:3001/users/${userId}/check-streak`,
@@ -167,7 +170,6 @@ const TimeMachine: React.FC<TimeMachineProps> = ({ onNewslettersChange }) => {
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
-      console.log("User progress deleted successfully");
     } catch (error: any) {
       console.error(error.message || "Failed to delete user progress");
     }
@@ -181,6 +183,9 @@ const TimeMachine: React.FC<TimeMachineProps> = ({ onNewslettersChange }) => {
     await deleteUserProgress();
     if (onNewslettersChange) {
       onNewslettersChange();
+    }
+    if (onReset) {
+      onReset();
     }
   };
 
@@ -198,7 +203,7 @@ const TimeMachine: React.FC<TimeMachineProps> = ({ onNewslettersChange }) => {
           ({weekDays[localSimulatedDate.getDay()]})
         </span>
       </label>
-      <div className="mt-2 flex items-center">
+      <div className="flex items-center">
         <button
           onClick={handleNextDay}
           className="ml-4 px-4 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"

@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 
+interface HistoryProps {
+  userId: string;
+}
+
 interface HistoryEntry {
   newsletterId: string;
   formattedTimestamp: string;
 }
 
-const History: React.FC = () => {
+const History: React.FC<HistoryProps> = ({ userId }) => {
   const [historyList, setHistoryList] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -13,20 +17,6 @@ const History: React.FC = () => {
   const PAGE_SIZE = 10;
 
   useEffect(() => {
-    let userId: number;
-    try {
-      const user = localStorage.getItem("user");
-      if (!user) {
-        throw new Error("No user found in localStorage.");
-      }
-      const parsedUser = JSON.parse(user);
-      userId = parsedUser.id;
-    } catch (e) {
-      console.error("Error parsing user:", e);
-      setError("Dados de usuário inválidos.");
-      setLoading(false);
-      return;
-    }
     // Fetch history from the backend API endpoint
     fetch(`http://localhost:3001/users/${userId}/history`)
       .then((res) => {
