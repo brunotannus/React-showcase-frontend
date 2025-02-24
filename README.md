@@ -1,16 +1,29 @@
 # The News Application
 
-## 📖 **Descrição do Projeto**
-
-O **The News Application** é uma aplicação web que combina funcionalidades de leitura de newsletters com gamificação. Os usuários podem aumentar suas streaks (sequências diárias) e highscores ao interagir com as newsletters, desbloqueando novos avatares. A aplicação também inclui um painel administrativo com métricas e estatísticas úteis.
+## 📖 Descrição do Projeto
+O *The News Application* é uma aplicação web que combina funcionalidades de leitura de newsletters com gamificação. Os usuários podem aumentar suas streaks (sequências diárias) e highscores ao interagir com as newsletters, desbloqueando novos avatares. A aplicação também inclui um painel administrativo com métricas e estatísticas úteis.
 
 ---
 
-## 🚀 **Como Executar o Projeto**
+## 🚀 Como Executar o Projeto Usando Containers
 
-### 1. **Clone os Repositórios**
+O projeto pode ser executado facilmente utilizando containers Docker, eliminando a necessidade de configurar manualmente o banco de dados MySQL ou instalar dependências localmente.
 
-Clone os repositórios do **frontend** e do **backend**
+### **1. Pré-requisitos**
+Certifique-se de ter instalado:
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+
+---
+
+### **2. Clone os Repositórios**
+
+Clone os repositórios do frontend e backend:
+
+```
+git clone https://github.com/brunotannus/thenewscase-frontend.git frontend
+git clone https://github.com/brunotannus/thenewscase-backend.git backend
+```
 
 ### 2. **Instale as Dependências**
 
@@ -24,34 +37,18 @@ Navegue para as pastas do frontend e backend separadamente e instale as dependê
 
 `npm install`
 
-## Instalando MySQL
+## **Inicializar os Containers**
+Na raiz do projeto, execute o comando para iniciar todos os containers:
 
-1. Instale MySQL em sua máquina.
-2. Logue como root:
+`docker compose -f ./backend/docker-compose.yml build`
 
-   `sudo mysql -u root -p`
-   
-4. Execute os comandos:
-
-```
-CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin123';
-GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost' WITH GRANT OPTION;
-CREATE DATABASE thenewsdb;
-FLUSH PRIVILEGES;
-```
-
-
-### 3. **Inicie os Servidores**
-
-Inicie o **frontend** e o **backend** em terminais separados:
-
-**No frontend**
-
-`npm start`
-
-**No backend**
-
-`npm start`
+Isso fará o seguinte:
+- Criará e iniciará um container para o MySQL.
+- Construirá as imagens para o backend e frontend e iniciará seus containers.
+- Mapeará as portas locais para os serviços:
+  - Frontend em `http://localhost:3000`
+  - Backend em `http://localhost:3001`
+  - MySQL na porta `3306`
 
 ---
 
