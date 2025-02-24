@@ -11,25 +11,33 @@ O **The News Application** é uma aplicação web que combina funcionalidades de
 ### 1. **Clone os Repositórios**
 
 Clone os repositórios do **frontend** e do **backend**:
+
 git clone https://github.com/brunotannus/thenewscase-frontend
+
 git clone https://github.com/brunotannus/thenewscase-backend
 
 ### 2. **Instale as Dependências**
 
 Navegue para as pastas do frontend e backend separadamente e instale as dependências:
-No frontend
+
+**No frontend**
+
 npm install
 
-No backend
+**No backend**
+
 npm install
 
 ### 3. **Inicie os Servidores**
 
 Inicie o **frontend** e o **backend** em terminais separados:
-No frontend
+
+**No frontend**
+
 npm start
 
-No backend
+**No backend**
+
 npm start
 
 ---
@@ -98,5 +106,10 @@ O painel administrativo inclui:
 Este projeto foi desenvolvido para simular uma experiência gamificada na leitura de newsletters, permitindo testes completos com diferentes cenários. Divirta-se explorando as funcionalidades!
 
 ---
+
+## 📝 **Video teste**
+
+[screen-capture.webm](https://github.com/user-attachments/assets/0aeb8ecd-8b07-4c6e-8fbb-e81e18cd81a6)
+
 
 🎉 **Bom teste!**
