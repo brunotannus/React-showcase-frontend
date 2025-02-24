@@ -107,4 +107,9 @@ Este projeto foi desenvolvido para simular uma experiência gamificada na leitur
 
 ---
 
+## 📝 **Video teste**
+
+[screen-capture.webm](https://github.com/user-attachments/assets/0aeb8ecd-8b07-4c6e-8fbb-e81e18cd81a6)
+
+
 🎉 **Bom teste!**
