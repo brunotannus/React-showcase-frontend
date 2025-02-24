@@ -38,7 +38,7 @@ Navegue para as pastas do frontend e backend separadamente e instale as dependê
 4. Execute os comandos:
 
 ```
-REATE USER 'admin'@'localhost' IDENTIFIED BY 'admin123';
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin123';
 GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost' WITH GRANT OPTION;
 CREATE DATABASE thenewsdb;
 FLUSH PRIVILEGES;
