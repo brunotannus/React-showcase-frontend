@@ -10,11 +10,7 @@ O **The News Application** é uma aplicação web que combina funcionalidades de
 
 ### 1. **Clone os Repositórios**
 
-Clone os repositórios do **frontend** e do **backend**:
-
-git clone https://github.com/brunotannus/thenewscase-frontend
-
-git clone https://github.com/brunotannus/thenewscase-backend
+Clone os repositórios do **frontend** e do **backend**
 
 ### 2. **Instale as Dependências**
 
