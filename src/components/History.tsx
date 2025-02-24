@@ -48,7 +48,7 @@ const History: React.FC<HistoryProps> = ({ userId }) => {
         setError(err.message);
         setLoading(false);
       });
-  }, []);
+  }, [userId]);
 
   // Process each entry "newsletterId|timestamp" into an object
   const formattedEntries: HistoryEntry[] = historyList
