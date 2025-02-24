@@ -10,11 +10,7 @@ O **The News Application** é uma aplicação web que combina funcionalidades de
 
 ### 1. **Clone os Repositórios**
 
-Clone os repositórios do **frontend** e do **backend**:
-
-git clone https://github.com/brunotannus/thenewscase-frontend
-
-git clone https://github.com/brunotannus/thenewscase-backend
+Clone os repositórios do **frontend** e do **backend**
 
 ### 2. **Instale as Dependências**
 
@@ -22,11 +18,28 @@ Navegue para as pastas do frontend e backend separadamente e instale as dependê
 
 **No frontend**
 
-npm install
+`npm install`
 
 **No backend**
 
-npm install
+`npm install`
+
+## Instalando MySQL
+
+1. Instale MySQL em sua máquina.
+2. Logue como root:
+
+   `sudo mysql -u root -p`
+   
+4. Execute os comandos:
+
+```
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin123';
+GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost' WITH GRANT OPTION;
+CREATE DATABASE thenewsdb;
+FLUSH PRIVILEGES;
+```
+
 
 ### 3. **Inicie os Servidores**
 
@@ -34,11 +47,11 @@ Inicie o **frontend** e o **backend** em terminais separados:
 
 **No frontend**
 
-npm start
+`npm start`
 
 **No backend**
 
-npm start
+`npm start`
 
 ---
 
