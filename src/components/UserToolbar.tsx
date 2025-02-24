@@ -18,9 +18,6 @@ const UserToolbar: React.FC<UserToolbarProps> = ({
   avatarChangeCounter,
   userId,
 }) => {
-  console.log("UserToolbar component rendered");
-  console.log("Props received:", { userId, avatarChangeCounter });
-
   const [localAvatarUrl, setLocalAvatarUrl] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -121,10 +118,6 @@ const UserToolbar: React.FC<UserToolbarProps> = ({
     fetchAvatar();
     fetchRole();
   }, [userId, avatarChangeCounter]);
-
-  useEffect(() => {
-    console.log("localAvatarUrl updated:", localAvatarUrl);
-  }, [localAvatarUrl]);
 
   return (
     <div className="flex gap-1 justify-end items-center">

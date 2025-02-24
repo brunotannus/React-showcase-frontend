@@ -1,3 +1,4 @@
+import { on } from "events";
 import React, { useState, useEffect } from "react";
 
 const DEFAULT_SIMULATED_DATE = "2025-02-20";
@@ -100,6 +101,7 @@ const TimeMachine: React.FC<TimeMachineProps> = ({
     ) {
       postNewsletter(currentDate);
     }
+    onReset?.();
   };
 
   // Handler for Reset button
