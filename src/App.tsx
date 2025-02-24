@@ -24,7 +24,7 @@ const App: React.FC = () => {
         <Route element={<AdminProtectedRoute />}>
           <Route path="/admin" element={<AdminDashboard />} />
         </Route>
-        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </Router>
   );
