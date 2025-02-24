@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 
-const defaultSimulatedDate = "2025-02-20";
-const weekDays = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+const DEFAULT_SIMULATED_DATE = "2025-02-20";
+const WEEK_DAYS = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 
+// Utility functions
 const parseLocalDate = (dateStr: string): Date => {
   const [year, month, day] = dateStr.split("-").map(Number);
   return new Date(year, month - 1, day);
@@ -24,9 +25,8 @@ const TimeMachine: React.FC<TimeMachineProps> = ({
   onNewslettersChange,
   onReset,
 }) => {
-  // Initialize state from localStorage or default
   const [simulatedDate, setSimulatedDate] = useState<string>(() => {
-    return localStorage.getItem("simulatedDate") || defaultSimulatedDate;
+    return localStorage.getItem("simulatedDate") || DEFAULT_SIMULATED_DATE;
   });
 
   // Persist simulatedDate changes
@@ -34,57 +34,58 @@ const TimeMachine: React.FC<TimeMachineProps> = ({
     localStorage.setItem("simulatedDate", simulatedDate);
   }, [simulatedDate]);
 
-  // The postNewsletter function that sends the simulated date to the backend
+  // Fetch user data from localStorage
+  const getUserFromLocalStorage = (): { id: string } | null => {
+    const userString = localStorage.getItem("user");
+    return userString ? JSON.parse(userString) : null;
+  };
+
+  // Post a newsletter for a specific date
   const postNewsletter = async (date: Date) => {
     try {
       const response = await fetch("http://localhost:3001/newsletters", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // Sending the formatted date as string (or convert as needed)
         body: JSON.stringify({ date: formatDateString(date) }),
       });
       if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
+        throw new Error(`Erro ao postar newsletter: ${response.status}`);
       }
-      if (onNewslettersChange) {
-        onNewslettersChange();
-      }
-    } catch (error: any) {
-      console.error(error.message || "Failed to post newsletter");
+      onNewslettersChange?.();
+    } catch (error) {
+      console.error("Erro ao postar newsletter:", error);
     }
   };
 
+  // Check streak for a specific date
   const checkStreak = async (userId: string, dateToCheck: string) => {
     try {
       const response = await fetch(
         `http://localhost:3001/users/${userId}/check-streak`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ date: dateToCheck }),
         }
       );
       if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
+        throw new Error(`Erro ao verificar sequência: ${response.status}`);
       }
       const data = await response.json();
       console.log(data.message);
-    } catch (err: any) {
-      console.error(err.message || "Failed to check streak");
+    } catch (error) {
+      console.error("Erro ao verificar sequência:", error);
     }
   };
 
   // Handler for Next Day button
   const handleNextDay = async () => {
-    // Tell the backend to check if a streak was redeemed the previous day (except Sundays)
-    // If not, reset the streak
-    const userString = localStorage.getItem("user");
-    if (!userString) {
-      throw new Error("No user found in localStorage.");
+    const user = getUserFromLocalStorage();
+    if (!user) {
+      console.error("Nenhum usuário encontrado no localStorage.");
+      return;
     }
-    const user = JSON.parse(userString);
+
     await checkStreak(user.id, simulatedDate);
 
     const currentDate = parseLocalDate(simulatedDate);
@@ -92,100 +93,49 @@ const TimeMachine: React.FC<TimeMachineProps> = ({
     const newSimulatedDate = formatDateString(currentDate);
     setSimulatedDate(newSimulatedDate);
 
-    // Posts a newsletter on a new day
     if (
-      currentDate.getTime() >= parseLocalDate("2025-02-21").getTime() &&
-      currentDate.getTime() <= parseLocalDate("2025-02-28").getTime() &&
+      currentDate >= parseLocalDate("2025-02-21") &&
+      currentDate <= parseLocalDate("2025-02-28") &&
       currentDate.getDay() !== 0 // Not Sunday
     ) {
       postNewsletter(currentDate);
     }
   };
 
-  // Deletes future newsletters from the backend—invoked on reset
-  const deleteFutureNewsletters = async (date: string) => {
-    try {
-      const response = await fetch("http://localhost:3001/newsletters", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          date,
-        }),
-      });
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-    } catch (error: any) {
-      console.error(error.message || "Failed to delete future newsletters");
-    }
-  };
-
-  // Deletes user history from the backend—invoked on reset
-  const deleteHistory = async () => {
-    try {
-      const userString = localStorage.getItem("user");
-      if (!userString) {
-        console.error("No logged in user found in localStorage.");
-        return;
-      }
-      const user = JSON.parse(userString);
-      const response = await fetch(
-        `http://localhost:3001/users/${user.id}/history`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-      console.log("User history deleted successfully");
-    } catch (error: any) {
-      console.error(error.message || "Failed to delete user history");
-    }
-  };
-
-  // Deletes user progress from the backend—invoked on reset
-  const deleteUserProgress = async () => {
-    try {
-      const userString = localStorage.getItem("user");
-      if (!userString) {
-        console.error("No logged in user found in localStorage.");
-        return;
-      }
-      const user = JSON.parse(userString);
-      const response = await fetch(
-        `http://localhost:3001/users/${user.id}/progress`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-    } catch (error: any) {
-      console.error(error.message || "Failed to delete user progress");
-    }
-  };
-
   // Handler for Reset button
   const handleReset = async () => {
-    setSimulatedDate(defaultSimulatedDate);
-    await deleteFutureNewsletters(defaultSimulatedDate);
-    await deleteHistory();
-    await deleteUserProgress();
-    if (onNewslettersChange) {
-      onNewslettersChange();
-    }
-    if (onReset) {
-      onReset();
+    setSimulatedDate(DEFAULT_SIMULATED_DATE);
+    try {
+      await Promise.all([
+        fetch("http://localhost:3001/newsletters", {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ date: DEFAULT_SIMULATED_DATE }),
+        }),
+        fetch(
+          `http://localhost:3001/users/${
+            getUserFromLocalStorage()?.id
+          }/history`,
+          {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+          }
+        ),
+        fetch(
+          `http://localhost:3001/users/${
+            getUserFromLocalStorage()?.id
+          }/progress`,
+          {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+          }
+        ),
+      ]);
+      console.log("Dados resetados com sucesso.");
+      onNewslettersChange?.();
+      onReset?.();
+    } catch (error) {
+      console.error("Erro ao resetar dados:", error);
     }
   };
 
@@ -200,19 +150,21 @@ const TimeMachine: React.FC<TimeMachineProps> = ({
           {localSimulatedDate.toLocaleDateString("pt-BR")}
         </span>
         <span className="text-gray-500 ml-1 italic">
-          ({weekDays[localSimulatedDate.getDay()]})
+          ({WEEK_DAYS[localSimulatedDate.getDay()]})
         </span>
       </label>
       <div className="flex items-center">
         <button
           onClick={handleNextDay}
           className="ml-4 px-4 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
+          aria-label="Avançar para o próximo dia"
         >
           Próximo dia
         </button>
         <button
           onClick={handleReset}
           className="ml-2 px-4 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+          aria-label="Resetar progresso e dados"
         >
           Reset
         </button>

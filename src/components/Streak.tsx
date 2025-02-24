@@ -53,7 +53,6 @@ const Streak: React.FC<StreakProps> = ({ onAvatarChange, userId }) => {
     // Function to fetch the current avatar from the backend.
     const fetchAvatar = async () => {
       try {
-        console.log(localStorage.getItem("user"));
         const res = await fetch(
           `http://localhost:3001/users/${userId}/avatar-id`
         );
