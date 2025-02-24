@@ -40,7 +40,7 @@ Navegue para as pastas do frontend e backend separadamente e instale as dependê
 ## **Inicializar os Containers**
 Na raiz do projeto, execute o comando para iniciar todos os containers:
 
-`docker compose -f ./backend/docker-compose.yml build`
+`docker compose -f ./backend/docker-compose.yml up --build`
 
 Isso fará o seguinte:
 - Criará e iniciará um container para o MySQL.
