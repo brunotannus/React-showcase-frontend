@@ -10,7 +10,6 @@ const Login: React.FC = () => {
   const handleLogin = async () => {
     try {
       const credentials = { email, password };
-      console.log("Sending credentials to the backend:", credentials);
 
       const response = await fetch("http://localhost:3001/login", {
         method: "POST",

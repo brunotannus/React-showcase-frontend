@@ -85,17 +85,13 @@ const UserToolbar: React.FC<UserToolbarProps> = ({
         const response = await fetch(
           `http://localhost:3001/users/${userId}/avatar`
         );
-        console.log("Avatar fetch response:", response);
 
         if (!response.ok) {
           throw new Error("Erro ao buscar o avatar.");
         }
 
         const blob = await response.blob();
-        console.log("Avatar blob:", blob);
-
         const avatarBlobUrl = URL.createObjectURL(blob);
-        console.log("Avatar Blob URL:", avatarBlobUrl);
 
         setLocalAvatarUrl(avatarBlobUrl);
       } catch (err) {
