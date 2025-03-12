@@ -1,125 +1,145 @@
-# The News Application
+## 📖 Project Description
 
-## 📖 Descrição do Projeto
-O *The News Application* é uma aplicação web que combina funcionalidades de leitura de newsletters com gamificação. Os usuários podem aumentar suas streaks (sequências diárias) e highscores ao interagir com as newsletters, desbloqueando novos avatares. A aplicação também inclui um painel administrativo com métricas e estatísticas úteis.
+The _React Showcase_ is a web application that combines newsletter reading functionalities with gamification. Users can increase their streaks (daily sequences) and high scores by interacting with newsletters, unlocking new avatars. The application also includes an administrative panel with useful metrics and statistics.
 
----
+## 🚀 How to Run the Project Using Containers
 
-## 🚀 Como Executar o Projeto Usando Containers
+The project can be easily run using Docker containers, eliminating the need to manually configure the MySQL database or install dependencies locally.
 
-O projeto pode ser executado facilmente utilizando containers Docker, eliminando a necessidade de configurar manualmente o banco de dados MySQL ou instalar dependências localmente.
+## 1\. Prerequisites
 
-### **1. Pré-requisitos**
-Certifique-se de ter instalado:
-- [Docker](https://www.docker.com/)
-- [Docker Compose](https://docs.docker.com/compose/)
+Ensure you have installed:
 
----
+-   [Docker](https://www.docker.com/)
+    
+-   [Docker Compose](https://docs.docker.com/compose/)
+    
 
-### **2. Clone os Repositórios**
+## 2\. Clone the Repositories
 
-Clone os repositórios do frontend e backend:
+Clone the frontend and backend repositories:
 
-```
-git clone https://github.com/brunotannus/thenewscase-frontend.git frontend
-git clone https://github.com/brunotannus/thenewscase-backend.git backend
-```
+bash
 
-### 2. **Instale as Dependências**
+`git clone https://github.com/brunotannus/reactshowcase-frontend.git frontend git clone https://github.com/brunotannus/reactshowcase-backend.git backend`
 
-Navegue para as pastas do frontend e backend separadamente e instale as dependências:
+## 2\. Install Dependencies
 
-**No frontend**
+Navigate to the frontend and backend folders separately and install the dependencies:
+
+**In the frontend**
 
 `npm install`
 
-**No backend**
+**In the backend**
 
 `npm install`
 
-## **Inicializar os Containers**
-Na raiz do projeto, execute o comando para iniciar todos os containers:
+## **Initialize the Containers**
+
+In the project root, run the command to start all containers:
 
 `docker compose -f ./backend/docker-compose.yml up --build`
 
-Isso fará o seguinte:
-- Criará e iniciará um container para o MySQL.
-- Construirá as imagens para o backend e frontend e iniciará seus containers.
-- Mapeará as portas locais para os serviços:
-  - Frontend em `http://localhost:3000`
-  - Backend em `http://localhost:3001`
-  - MySQL na porta `3306`
+This will do the following:
 
----
+-   Create and start a container for MySQL.
+    
+-   Build the images for the backend and frontend and start their containers.
+    
+-   Map local ports to the services:
+    
+    -   Frontend at `http://localhost:3000`
+        
+    -   Backend at `http://localhost:3001`
+        
+    -   MySQL on port `3306`
+        
 
-## 🧪 **Testando a Aplicação**
+## 🧪 **Testing the Application**
 
-### 1. **Usuários Disponíveis para Testes**
+## 1\. Available Users for Testing
 
-- **Usuário Comum**:
-  - E-mail: `user1@example.com`
-  - Senha: `123`
-- **Administrador**:
-  - E-mail: `admin@example.com`
-  - Senha: `123`
+-   **Regular User**:
+    
+    -   Email: `user1@example.com`
+        
+    -   Password: `123`
+        
+-   **Administrator**:
+    
+    -   Email: `admin@example.com`
+        
+    -   Password: `123`
+        
 
-### 2. **Funcionalidades do Usuário Comum**
+## 2\. Regular User Features
 
-- O usuário `user1` inicia sem streaks ou highscores.
-- Clique nas newsletters para aumentar sua streak diária e tentar obter um highscore.
-- Use a "Máquina do Tempo" no topo da página para controlar o dia atual.
-- Regras para aumentar a streak:
-  - O usuário deve ler uma newsletter postada no mesmo dia.
-  - A newsletter não deve ter sido lida anteriormente pelo usuário.
+-   User `user1` starts without streaks or high scores.
+    
+-   Click on newsletters to increase your daily streak and try to achieve a high score.
+    
+-   Use the "Time Machine" at the top of the page to control the current day.
+    
+-   Rules to increase the streak:
+    
+    -   The user must read a newsletter posted on the same day.
+        
+    -   The newsletter must not have been read previously by the user.
+        
 
-### 3. **Funcionalidades do Administrador**
+## 3\. Administrator Features
 
-- O administrador pode acessar o painel administrativo que contém:
-  - Um leaderboard com os highscores dos usuários gerados aleatoriamente.
-  - Estatísticas úteis sobre os usuários.
+-   The administrator can access the administrative panel that contains:
+    
+    -   A leaderboard with users' high scores generated randomly.
+        
+    -   Useful statistics about users.
+        
 
----
+## 📅 **Simulating Days and Posting Newsletters**
 
-## 📅 **Simulação de Dias e Postagem de Newsletters**
+-   A new newsletter is automatically posted every day (except Sundays) until February 28, 2025.
+    
+-   Use the "Time Machine" to advance or reset days and test different scenarios.
+    
 
-- Uma nova newsletter é postada automaticamente todos os dias (exceto domingos) até o dia `28/02/2025`.
-- Use a "Máquina do Tempo" para avançar ou resetar dias e testar diferentes cenários.
+## 🛠️ **Technical Details**
 
----
+## Backend
 
-## 🛠️ **Detalhes Técnicos**
+-   The backend generates an array of 5 fictional users with random variables such as streak, high score, and beehive variables.
+    
+-   Default backend address: `http://localhost:3001`.
+    
 
-### Backend
+## Frontend
 
-- O backend gera um array de 5 usuários fictícios com variáveis aleatórias como streak, highscore e variáveis do beehiive.
-- Endereço padrão do backend: `http://localhost:3001`.
+-   The frontend connects to the backend for authentication, reading newsletters, controlling streaks, and displaying statistics.
+    
+-   Default frontend address: `http://localhost:3000`.
+    
 
-### Frontend
+## 📊 **Administrative Panel**
 
-- O frontend conecta-se ao backend para autenticação, leitura de newsletters, controle de streaks e exibição de estatísticas.
-- Endereço padrão do frontend: `http://localhost:3000`.
+The administrative panel includes:
 
----
+-   **Leaderboard**: Displays users' high scores generated randomly.
+    
+-   **Statistics**:
+    
+    -   Useful metrics about users, such as streaks, high scores, and interactions.
+        
 
-## 📊 **Painel Administrativo**
+## 📝 **Final Considerations**
 
-O painel administrativo inclui:
+This project was developed to simulate a gamified experience in reading newsletters, allowing for complete testing with different scenarios. Enjoy exploring the features!
 
-- **Leaderboard**: Exibe os highscores dos usuários gerados aleatoriamente.
-- **Estatísticas**:
-  - Métricas úteis sobre os usuários, como streaks, highscores e interações.
-
----
-
-## 📝 **Considerações Finais**
-
-Este projeto foi desenvolvido para simular uma experiência gamificada na leitura de newsletters, permitindo testes completos com diferentes cenários. Divirta-se explorando as funcionalidades!
-
----
-
-## 📝 **Video teste**
+## 📝 **Test Video**
 
 [screen-capture.webm](https://github.com/user-attachments/assets/0aeb8ecd-8b07-4c6e-8fbb-e81e18cd81a6)
 
+🎉 **Good testing!**
 
-🎉 **Bom teste!**
+
+
