@@ -21,7 +21,9 @@ Clone the frontend and backend repositories:
 
 bash
 
-`git clone https://github.com/brunotannus/reactshowcase-frontend.git frontend git clone https://github.com/brunotannus/reactshowcase-backend.git backend`
+`git clone https://github.com/brunotannus/React-showcase-frontend.git` frontend
+
+`git clone https://github.com/brunotannus/React-showcase-backend.git` backend
 
 ## 2\. Install Dependencies
 
