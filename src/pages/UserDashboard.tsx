@@ -122,7 +122,7 @@ const UserDashboard: React.FC = () => {
               className="w-full h-full"
             />
           </div>
-          <h1>the news Case</h1>
+          <h1>React Showcase News</h1>
         </div>
 
         {/* Tab Buttons */}
